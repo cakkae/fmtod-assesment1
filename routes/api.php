@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group( array( 'prefix' => '/v11'), function() {
-    Route::resource('companies', 'CompanyController'); 
+Route::group( array( 'prefix' => '/v1'), function() {
+    Route::resource('companies', 'CompanyController');
+    Route::resource('employees', 'EmployeeController');
 });

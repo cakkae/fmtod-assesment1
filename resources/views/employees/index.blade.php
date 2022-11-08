@@ -1,18 +1,19 @@
-<!-- /resources/views/companies/index.blade.php -->
+<!-- /resources/views/employees/index.blade.php -->
 
 @extends('layouts.app')
 
 @section('content')
 
+    @if (session()->get('success'))
+        <div class="alert alert-success">
+            {{ session()->get('success') }}
+        </div>
+    @endif
+
     <div class="container">
-        @if (session()->get('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
         <div class="card">
             <div class="card-header">
-                <a href="{{ route('companies.create') }}">Add new company</a>
+                <a href="{{ route('employees.create') }}">Add new employee</a>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -21,32 +22,28 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Name</th>
+                                    <th scope="col">First name</th>
+                                    <th scope="col">Last name</th>
+                                    <th scope="col">Company</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Logo</th>
-                                    <th scope="col">Website</th>
+                                    <th scope="col">Phone</th>
                                     <th scope="col" colspan="2">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($companies as $key => $company)
+                                @forelse ($employees as $key => $employee)
                                     <tr>
                                         <th scope="row" class="align-middle">
-                                            {{ $key + $companies->firstItem() }}
+                                            {{ $key + $employees->firstItem() }}
                                         </th>
-                                        <td class="align-middle">{{ $company->name }}</td>
-                                        <td class="align-middle">{{ $company->email }}</td>
+                                        <td class="align-middle">{{ $employee->firstName }}</td>
+                                        <td class="align-middle">{{ $employee->lastName }}</td>
+                                        <td class="align-middle">{{ App\Models\Company::where('id', $employee->company_id)->pluck('name')[0] }}</td>
+                                        <td class="align-middle">{{ $employee->email }}</td>
+                                        <td class="align-middle">{{ $employee->phone }}</td>
+                                        <td class="align-middle"><a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-primary w-100">Edit</a></td>
                                         <td class="align-middle">
-                                            @if ($company->logo)
-                                                <img src="{{ url('storage/'.$company->logo) }}" alt="" title="" />
-                                            @else
-                                                <span class="align-middle">No image</span>
-                                            @endif
-                                        </td>
-                                        <td class="align-middle">{{ $company->website }}</td>
-                                        <td class="align-middle"><a href="{{ route('companies.edit', $company->id) }}" class="btn btn-primary w-100">Edit</a></td>
-                                        <td class="align-middle">
-                                            <form action="{{ route('companies.destroy', $company->id)}}" method="post">
+                                            <form action="{{ route('employees.destroy', $employee->id)}}" method="post">
                                               @csrf
                                               @method('DELETE')
                                               <button class="btn btn-danger w-100" type="submit">Delete</button>
@@ -56,7 +53,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="6">
-                                            <h3 class="text-center mt-3 mb-3">There is no company</h3>
+                                            <h3 class="text-center mt-3 mb-3">There is no employee</h3>
                                         </td>
                                     </tr>
                                 @endforelse
@@ -64,7 +61,7 @@
                         </table>
                         {{-- Pagination --}}
                         <div class="d-flex justify-content-center">
-                            {!! $companies->links() !!}
+                            {!! $employees->links() !!}
                         </div>
                     </div>
                 </div>

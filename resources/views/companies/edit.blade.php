@@ -52,4 +52,4 @@
     </div>
 
 @endsection
-<!-- Create Post Form -->
+<!-- Create Company Form -->
